@@ -194,6 +194,10 @@
       border-color: #3a7ca5;
       box-shadow: 0 4px 16px #b3e0ff, 0 2px 8px #e3f0ff;
     }
+    .cell.special-highlight {
+      box-shadow: 0 0 0 2px #ffb300 inset !important;
+      z-index: 3;
+    }
     @media (max-width: 600px) {
       .sudoku-container {
         max-width: 99vw;
@@ -255,10 +259,38 @@
     function renderBoard() {
       const boardDiv = document.getElementById('sudoku-board');
       boardDiv.innerHTML = '';
+      // Pick one editable cell from each sub-square (arbitrarily, first found)
+      const specialCells = [];
+      for (let box = 0; box < 9; box++) {
+        const editable = [];
+        for (let dr = 0; dr < 3; dr++) {
+          for (let dc = 0; dc < 3; dc++) {
+            const r = Math.floor(box / 3) * 3 + dr;
+            const c = (box % 3) * 3 + dc;
+            if (!isPrefilled(r, c)) {
+              editable.push([r, c]);
+            }
+          }
+        }
+        if (editable.length > 0) {
+          if (box === 4 && editable.length > 1) {
+            // For the 5th subsquare, pick the second editable cell
+            specialCells.push(editable[1][0] + ',' + editable[1][1]);
+          } else if (box === 8 && editable.length > 0) {
+            // For the 9th subsquare, pick the last editable cell
+            const last = editable[editable.length - 1];
+            specialCells.push(last[0] + ',' + last[1]);
+          } else {
+            // For others, pick the first editable cell
+            specialCells.push(editable[0][0] + ',' + editable[0][1]);
+          }
+        }
+      }
       for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
           const cell = document.createElement('div');
           cell.className = 'cell';
+          if (specialCells.includes(r + ',' + c)) cell.classList.add('special-highlight');
           if (isPrefilled(r, c)) cell.classList.add('prefilled');
           if (selected.row === r && selected.col === c) cell.classList.add('selected');
           // Highlight row, col, box
