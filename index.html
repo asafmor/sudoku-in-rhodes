@@ -146,7 +146,7 @@
       background: #e3f0ff;
       border-radius: 16px;
       box-shadow: 0 2px 12px 0 rgba(58,124,165,0.10);
-      padding: 0.7em 0.2em;
+      padding: 0.7em 1em;
       width: 100%;
       max-width: 420px;
       margin: 0 auto;
@@ -175,6 +175,16 @@
       outline: none;
       margin: 0;
       touch-action: manipulation;
+      opacity: 1;
+    }
+    .key.disabled {
+      background: #f0f4f8;
+      color: #b0bccc;
+      border-color: #d0dbe6;
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.7;
+      pointer-events: none;
     }
     .key:active, .key.active, .key:hover {
       background: #b3e0ff;
@@ -296,17 +306,26 @@
     function renderKeyboard() {
       const keyboardDiv = document.getElementById('keyboard');
       keyboardDiv.innerHTML = '';
+      // Determine if the keyboard should be disabled
+      let disableKeys = false;
+      if (selected.row === null || selected.col === null || isPrefilled(selected.row, selected.col)) {
+        disableKeys = true;
+      }
       for (let n = 1; n <= 9; n++) {
         const key = document.createElement('div');
         key.className = 'key';
         key.textContent = n;
-        key.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (selected.row === null || selected.col === null) return;
-          if (isPrefilled(selected.row, selected.col)) return; // Don't allow editing prefilled
-          board[selected.row][selected.col] = n;
-          renderBoard();
-        });
+        if (disableKeys) {
+          key.classList.add('disabled');
+        } else {
+          key.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (selected.row === null || selected.col === null) return;
+            if (isPrefilled(selected.row, selected.col)) return; // Don't allow editing prefilled
+            board[selected.row][selected.col] = n;
+            renderBoard();
+          });
+        }
         keyboardDiv.appendChild(key);
       }
     }
