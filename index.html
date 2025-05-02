@@ -146,17 +146,19 @@
       background: #e3f0ff;
       border-radius: 16px;
       box-shadow: 0 2px 12px 0 rgba(58,124,165,0.10);
-      padding: 0.7em 1em;
+      padding: 0.7em 0.5em;
       width: 100%;
       max-width: 420px;
       margin: 0 auto;
       margin-bottom: 1.2em;
-      gap: 0.7em;
+      gap: 0.5em;
+      overflow-x: unset;
+      position: relative;
     }
     .key {
       flex: 1 1 0;
-      min-width: 42px;
-      max-width: 52px;
+      min-width: 0;
+      max-width: none;
       height: 56px;
       display: flex;
       align-items: center;
@@ -203,13 +205,14 @@
       }
       .keyboard {
         max-width: 99vw;
-        padding: 0.3em 0.1em;
-        gap: 0.4em;
+        padding: 0.3em 0.2em;
+        gap: 0.3em;
+        overflow-x: unset;
       }
       .key {
-        font-size: 1.3em;
-        min-width: 36px;
-        max-width: 44px;
+        font-size: 1.2em;
+        min-width: 0;
+        max-width: none;
         height: 44px;
         border-radius: 14px;
       }
@@ -297,19 +300,22 @@
             e.stopPropagation();
             selected = {row: r, col: c};
             renderBoard();
+            renderKeyboard();
           });
           boardDiv.appendChild(cell);
         }
       }
+      // Always update the keyboard after rendering the board
+      renderKeyboard();
     }
 
     function renderKeyboard() {
       const keyboardDiv = document.getElementById('keyboard');
       keyboardDiv.innerHTML = '';
       // Determine if the keyboard should be disabled
-      let disableKeys = false;
-      if (selected.row === null || selected.col === null || isPrefilled(selected.row, selected.col)) {
-        disableKeys = true;
+      let disableKeys = true;
+      if (selected.row !== null && selected.col !== null && !isPrefilled(selected.row, selected.col)) {
+        disableKeys = false;
       }
       for (let n = 1; n <= 9; n++) {
         const key = document.createElement('div');
@@ -332,7 +338,6 @@
 
     // Initial render
     renderBoard();
-    renderKeyboard();
 
     // Optional: allow keyboard input for desktop users
     document.addEventListener('keydown', (e) => {
