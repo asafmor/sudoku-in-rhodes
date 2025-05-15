@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Sudoku in Rhodes</title>
@@ -17,6 +18,7 @@
       --font-main: 'Segoe UI', 'Arial', sans-serif;
       --shadow: 0 2px 8px rgba(58, 124, 165, 0.08);
     }
+
     body {
       background: var(--main-bg);
       font-family: var(--font-main);
@@ -29,6 +31,7 @@
       /* Add a soft blue gradient for Greek summer vibe */
       background: linear-gradient(135deg, #e3f0ff 0%, #f8fbff 60%, #b3e0ff 100%);
     }
+
     h1 {
       color: #3a7ca5;
       margin-top: 1.2em;
@@ -38,6 +41,7 @@
       font-size: 2em;
       text-shadow: 0 2px 8px #e3f0ff;
     }
+
     .sudoku-container {
       background: var(--cell-bg);
       border-radius: 24px;
@@ -45,12 +49,13 @@
       padding: 1.2em 1.2em 0.7em 1.2em;
       margin-bottom: 2em;
       width: 98vw;
-      max-width: 420px;
+      max-width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       box-sizing: border-box;
     }
+
     .sudoku-board {
       display: grid;
       grid-template-columns: repeat(9, 1fr);
@@ -60,12 +65,13 @@
       background: var(--main-bg);
       border: 3.5px solid #3a7ca5;
       border-radius: 20px;
-      box-shadow: 0 6px 24px 0 rgba(58,124,165,0.10), 0 1.5px 6px 0 rgba(58,124,165,0.08);
+      box-shadow: 0 6px 24px 0 rgba(58, 124, 165, 0.10), 0 1.5px 6px 0 rgba(58, 124, 165, 0.08);
       margin-bottom: 2em;
       aspect-ratio: unset;
       overflow: hidden;
       position: relative;
     }
+
     .cell {
       width: 100%;
       height: 0;
@@ -84,60 +90,75 @@
       z-index: 1;
       box-sizing: border-box;
     }
+
     .cell-content {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       width: 100%;
       text-align: center;
       pointer-events: none;
     }
+
     .cell.prefilled {
       background: var(--cell-prefill-bg);
       color: #1b4d6d;
       font-weight: 700;
       cursor: pointer;
     }
+
     .cell.selected {
       background: var(--cell-selected);
       z-index: 2;
       box-shadow: 0 0 0 2px #3a7ca5 inset;
     }
+
     .cell.highlight {
       background: var(--cell-highlight);
       z-index: 1;
     }
+
     .cell.same {
       background: var(--cell-same);
       color: #1b4d6d;
       z-index: 2;
     }
+
     /* Bold borders for 3x3 boxes */
     .cell.box-right {
       border-right: 2.5px solid var(--border-bold);
     }
+
     .cell.box-bottom {
       border-bottom: 2.5px solid var(--border-bold);
     }
+
     .cell.box-left {
       border-left: 2.5px solid var(--border-bold);
     }
+
     .cell.box-top {
       border-top: 2.5px solid var(--border-bold);
     }
+
     /* Rounded corners for the four corner cells */
     .cell.top-left-corner {
       border-top-left-radius: 12px;
     }
+
     .cell.top-right-corner {
       border-top-right-radius: 12px;
     }
+
     .cell.bottom-left-corner {
       border-bottom-left-radius: 12px;
     }
+
     .cell.bottom-right-corner {
       border-bottom-right-radius: 12px;
     }
+
     /* Virtual keyboard */
     .keyboard {
       display: flex;
@@ -145,16 +166,17 @@
       align-items: center;
       background: #e3f0ff;
       border-radius: 16px;
-      box-shadow: 0 2px 12px 0 rgba(58,124,165,0.10);
+      box-shadow: 0 2px 12px 0 rgba(58, 124, 165, 0.10);
       padding: 0.7em 0.5em;
       width: 100%;
       max-width: 420px;
       margin: 0 auto;
       margin-bottom: 1.2em;
-      gap: 0.5em;
+      gap: 3px;
       overflow-x: unset;
       position: relative;
     }
+
     .key {
       flex: 1 1 0;
       min-width: 0;
@@ -179,6 +201,7 @@
       touch-action: manipulation;
       opacity: 1;
     }
+
     .key.disabled {
       background: #f0f4f8;
       color: #b0bccc;
@@ -188,31 +211,40 @@
       opacity: 0.7;
       pointer-events: none;
     }
-    .key:active, .key.active, .key:hover {
+
+    .key:active,
+    .key.active,
+    .key:hover {
       background: #b3e0ff;
       color: #1b4d6d;
       border-color: #3a7ca5;
       box-shadow: 0 4px 16px #b3e0ff, 0 2px 8px #e3f0ff;
     }
+
     .cell.special-highlight {
       box-shadow: 0 0 0 2px #ffb300 inset !important;
       z-index: 3;
     }
+
     @media (max-width: 600px) {
       .sudoku-container {
         max-width: 99vw;
-        padding: 0.5em 0.7em 0.5em 0.7em; /* Maintain horizontal padding on mobile */
+        padding: 0.5em 0.7em 0.5em 0.7em;
+        /* Maintain horizontal padding on mobile */
       }
+
       .sudoku-board {
         max-width: 99vw;
         border-radius: 16px;
       }
+
       .keyboard {
         max-width: 99vw;
         padding: 0.3em 0.2em;
         gap: 0.3em;
         overflow-x: unset;
       }
+
       .key {
         font-size: 1.2em;
         min-width: 0;
@@ -223,6 +255,7 @@
     }
   </style>
 </head>
+
 <body>
   <h1>Sudoku in Rhodes</h1>
   <div class="sudoku-container">
@@ -232,29 +265,29 @@
   <script>
     // The hardcoded board from your image (0 = empty, others = prefilled)
     const initialBoard = [
-      [0,1,0, 3,0,0, 0,0,0],
-      [7,5,0, 0,0,4, 0,0,0],
-      [0,0,0, 0,5,0, 2,3,8],
+      [0, 1, 0, 3, 0, 0, 0, 0, 0],
+      [7, 5, 0, 0, 0, 4, 0, 0, 0],
+      [0, 0, 0, 0, 5, 0, 2, 3, 8],
 
-      [9,6,2, 4,1,5, 0,0,3],
-      [0,0,0, 7,6,0, 0,0,4],
-      [0,7,4, 0,0,0, 1,0,0],
+      [9, 6, 2, 4, 1, 5, 0, 0, 3],
+      [0, 0, 0, 7, 6, 0, 0, 0, 4],
+      [0, 7, 4, 0, 0, 0, 1, 0, 0],
 
-      [0,0,0, 5,0,0, 0,0,0],
-      [0,3,1, 6,0,2, 0,8,0],
-      [0,4,9, 0,3,0, 0,0,0]
+      [0, 0, 0, 5, 0, 0, 0, 0, 0],
+      [0, 3, 1, 6, 0, 2, 0, 8, 0],
+      [0, 4, 9, 0, 3, 0, 0, 0, 0]
     ];
 
     // State
     let board = JSON.parse(JSON.stringify(initialBoard));
-    let selected = {row: null, col: null};
+    let selected = { row: null, col: null };
 
     // Helpers
     function isPrefilled(row, col) {
       return initialBoard[row][col] !== 0;
     }
     function getBoxIndex(row, col) {
-      return Math.floor(row/3)*3 + Math.floor(col/3);
+      return Math.floor(row / 3) * 3 + Math.floor(col / 3);
     }
 
     // Rendering
@@ -332,7 +365,7 @@
           // Click handler
           cell.addEventListener('click', (e) => {
             e.stopPropagation();
-            selected = {row: r, col: c};
+            selected = { row: r, col: c };
             renderBoard();
             renderKeyboard();
           });
@@ -368,6 +401,22 @@
         }
         keyboardDiv.appendChild(key);
       }
+
+      const key = document.createElement('div');
+      key.className = 'key';
+      key.textContent = 'X';
+      if (disableKeys) {
+        key.classList.add('disabled');
+      } else {
+        key.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (selected.row === null || selected.col === null) return;
+          if (isPrefilled(selected.row, selected.col)) return; // Don't allow editing prefilled
+          board[selected.row][selected.col] = "";
+          renderBoard();
+        });
+      }
+      keyboardDiv.appendChild(key);
     }
 
     // Initial render
@@ -390,11 +439,12 @@
     // Tap outside board to deselect
     document.body.addEventListener('click', (e) => {
       if (!e.target.classList.contains('cell') && !e.target.classList.contains('key')) {
-        selected = {row: null, col: null};
+        selected = { row: null, col: null };
         renderBoard();
       }
     }, true);
 
   </script>
 </body>
+
 </html>
